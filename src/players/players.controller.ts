@@ -6,13 +6,14 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ParamsValidatorPipe } from '../common/pipes/params-validator.pipe';
+import { ParametersValidatorPipe } from 'src/common/pipes/parameters-validator.pipe';
 import { CreatePlayerDTO } from './dtos/createPlayer.dto';
 import { UpdatePlayerDTO } from './dtos/updatePlayer.dto';
-import { Player } from './player.interface';
+import { Player } from './interfaces/player.interface';
 import { PlayersService } from './players.service';
 
 @Controller('api/v1/players')
@@ -21,37 +22,45 @@ export class PlayersController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  async criarJogador(
-    @Body() createPlayerDTO: CreatePlayerDTO,
-  ): Promise<Player> {
-    return await this.playersService.criarJogador(createPlayerDTO);
+  async create(@Body() createPlayerDTO: CreatePlayerDTO): Promise<Player> {
+    return await this.playersService.create(createPlayerDTO);
   }
 
   @Put('/:_id')
   @UsePipes(ValidationPipe)
-  async atualizarJogador(
+  async update(
     @Body() updatePlayerDTO: UpdatePlayerDTO,
-    @Param('_id', ParamsValidatorPipe) _id: string,
+    @Param('_id', ParametersValidatorPipe) _id: string,
   ): Promise<void> {
-    await this.playersService.atualizarJogador(_id, updatePlayerDTO);
+    await this.playersService.update(_id, updatePlayerDTO);
   }
+
+  /*
+    Desafio
+    Passamos a utilizar query parameters com o verbo GET
+    */
 
   @Get()
-  async consultarJogadores(): Promise<Player[]> {
-    return await this.playersService.consultarTodosJogadores();
+  async get(@Query('playerId') _id: string): Promise<Player[] | Player> {
+    if (_id) {
+      return await this.playersService.getById(_id);
+    }
+
+    return await this.playersService.getAll();
   }
 
-  @Get('/:_id')
-  async consultarJogadorPorId(
-    @Param('_id', ParamsValidatorPipe) _id: string,
-  ): Promise<Player> {
-    return await this.playersService.consultarJogadorPorId(_id);
-  }
+  /*
+    @Get('/:_id')
+    async consultarJogadorPeloId(
+        @Param('_id', ValidacaoParametrosPipe) _id: string): Promise<Jogador> {
+                return await this.jogadoresService.consultarJogadorPeloId(_id);    
+    }
+    */
 
   @Delete('/:_id')
-  async deletarJogador(
-    @Param('_id', ParamsValidatorPipe) _id: string,
+  async remove(
+    @Param('_id', ParametersValidatorPipe) _id: string,
   ): Promise<void> {
-    await this.playersService.deletarJogador(_id);
+    await this.playersService.remove(_id);
   }
 }

@@ -13,7 +13,7 @@ export const CategorySchema = new mongoose.Schema(
     ],
     players: [
       {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Player',
       },
     ],

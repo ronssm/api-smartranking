@@ -11,12 +11,12 @@ import {
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
 
-  catch(exception: any, host: ArgumentsHost) {
-    const context = host.switchToHttp();
-    const request = context.getRequest();
-    const response = context.getResponse();
+  catch(exception: unknown, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse();
+    const request = ctx.getRequest();
 
-    const statusCode =
+    const status =
       exception instanceof HttpException
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
@@ -25,10 +25,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
       exception instanceof HttpException ? exception.getResponse() : exception;
 
     this.logger.error(
-      `Http Status: ${statusCode} - Error Message: ${JSON.stringify(message)}`,
+      `Http Status: ${status} Error Message: ${JSON.stringify(message)} `,
     );
 
-    response.status(statusCode).json({
+    response.status(status).json({
       timestamp: new Date().toISOString(),
       path: request.url,
       error: message,

@@ -4,10 +4,10 @@ export const PlayerSchema = new mongoose.Schema(
   {
     email: { type: String, unique: true },
     phoneNumber: { type: String },
-    name: { type: String },
-    ranking: { type: String },
-    rankingPosition: { type: Number },
-    photoUrl: { type: String },
+    name: String,
+    ranking: String,
+    rankingPosition: Number,
+    photoUrl: String,
   },
   { timestamps: true, collection: 'players' },
 );

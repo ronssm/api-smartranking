@@ -36,14 +36,14 @@ export class ChallengesController {
     this.logger.log(
       `createChallengeDTO: ${JSON.stringify(createChallengeDTO)}`,
     );
-    return await this.challengesService.create(createChallengeDTO);
+    return this.challengesService.create(createChallengeDTO);
   }
 
   @Get()
   async get(@Query('playerId') _id: string): Promise<Array<Challenge>> {
     return _id
-      ? await this.challengesService.getAllByPlayerId(_id)
-      : await this.challengesService.getAll();
+      ? this.challengesService.getAllByPlayerId(_id)
+      : this.challengesService.getAll();
   }
 
   @Put('/:_id')
@@ -59,7 +59,7 @@ export class ChallengesController {
     @Body(ValidationPipe) associateMatchDTO: AssociateMatchDTO,
     @Param('_id') _id: string,
   ): Promise<void> {
-    return await this.challengesService.associateMatch(_id, associateMatchDTO);
+    return this.challengesService.associateMatch(_id, associateMatchDTO);
   }
 
   @Delete('/:_id')

@@ -23,7 +23,7 @@ export class CategoriesController {
   async create(
     @Body() createCategoryDTO: CreateCategoryDTO,
   ): Promise<Category> {
-    return await this.categoriesService.create(createCategoryDTO);
+    return this.categoriesService.create(createCategoryDTO);
   }
 
   /*
@@ -37,14 +37,14 @@ export class CategoriesController {
     const playerId = params['playerId'];
 
     if (categoryId) {
-      return await this.categoriesService.getById(categoryId);
+      return this.categoriesService.getById(categoryId);
     }
 
     if (playerId) {
-      return await this.categoriesService.getPlayerCategory(playerId);
+      return this.categoriesService.getPlayerCategory(playerId);
     }
 
-    return await this.categoriesService.getAll();
+    return this.categoriesService.getAll();
   }
 
   /*
@@ -73,6 +73,6 @@ export class CategoriesController {
 
   @Post('/:_id/player/:playerId')
   async associatePlayer(@Param() params: string[]): Promise<void> {
-    return await this.categoriesService.associatePlayer(params);
+    return this.categoriesService.associatePlayer(params);
   }
 }

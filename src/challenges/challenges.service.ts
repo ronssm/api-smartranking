@@ -37,7 +37,7 @@ export class ChallengesService {
 
     const players = await this.playersService.getAll();
 
-    createChallengeDTO.players.map((playerDTO) => {
+    createChallengeDTO.players.forEach((playerDTO) => {
       const playerFilter = players.filter(
         (player) => player._id == playerDTO._id,
       );
@@ -51,10 +51,9 @@ export class ChallengesService {
         Verificar se o solicitante é um dos jogadores da partida
         */
 
-    const challengerIsAPlayerOnTheMatch =
-      await createChallengeDTO.players.filter(
-        (player) => player._id == createChallengeDTO.challenger,
-      );
+    const challengerIsAPlayerOnTheMatch = createChallengeDTO.players.filter(
+      (player) => player._id == createChallengeDTO.challenger,
+    );
 
     this.logger.log(
       `challengerIsAPlayerOfTheMatch: ${challengerIsAPlayerOnTheMatch}`,
@@ -90,11 +89,11 @@ export class ChallengesService {
         */
     createdChallenge.status = ChallengeStatus.PENDING;
     this.logger.log(`createdChallenge: ${JSON.stringify(createdChallenge)}`);
-    return await createdChallenge.save();
+    return createdChallenge.save();
   }
 
   async getAll(): Promise<Array<Challenge>> {
-    return await this.challengeModel
+    return this.challengeModel
       .find()
       .populate('challenger')
       .populate('players')
@@ -111,7 +110,7 @@ export class ChallengesService {
       throw new BadRequestException(`Player not found`);
     }
 
-    return await this.challengeModel
+    return this.challengeModel
       .find()
       .where('players')
       .in(_id)

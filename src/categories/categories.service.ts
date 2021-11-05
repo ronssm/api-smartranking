@@ -30,11 +30,11 @@ export class CategoriesService {
     }
 
     const newCategory = new this.categoryModel(createCategoryDTO);
-    return await newCategory.save();
+    return newCategory.save();
   }
 
   async getAll(): Promise<Array<Category>> {
-    return await this.categoryModel.find().populate('players').exec();
+    return this.categoryModel.find().populate('players').exec();
   }
 
   async getById(_id: string): Promise<Category> {
@@ -64,11 +64,7 @@ export class CategoriesService {
       throw new BadRequestException(`Player not found`);
     }
 
-    return await this.categoryModel
-      .findOne()
-      .where('players')
-      .in(playerId)
-      .exec();
+    return this.categoryModel.findOne().where('players').in(playerId).exec();
   }
 
   async update(

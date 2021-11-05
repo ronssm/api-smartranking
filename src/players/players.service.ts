@@ -28,7 +28,7 @@ export class PlayersService {
     }
 
     const newPlayer = new this.playerModel(createPlayerDTO);
-    return await newPlayer.save();
+    return newPlayer.save();
   }
 
   async update(_id: string, updatePlayerDTO: UpdatePlayerDTO): Promise<void> {
@@ -44,7 +44,7 @@ export class PlayersService {
   }
 
   async getAll(): Promise<Player[]> {
-    return await this.playerModel.find().exec();
+    return this.playerModel.find().exec();
   }
 
   async getById(_id: string): Promise<Player> {
@@ -64,6 +64,6 @@ export class PlayersService {
       throw new NotFoundException(`Player not found`);
     }
 
-    return await this.playerModel.deleteOne({ _id }).exec();
+    return this.playerModel.deleteOne({ _id }).exec();
   }
 }
